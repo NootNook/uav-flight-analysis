@@ -16,7 +16,7 @@ const Map = () => {
     const [parserOptions] = useAtom(parserOptionsAtom);
 
     const query = useQuery({
-        queryKey: ['gps'],
+        queryKey: ['gps', parserOptions],
         queryFn: async () => fetchGps(parserOptions.environnement, parserOptions.filename),
         select: (data: TGPSObject[]) => data.map((e) => ({ lat: e.latitude, lng: e.longitude })),
         initialData: [],

@@ -30,7 +30,7 @@ ChartJS.register(
 const Chart = () => {
     const [parserOptions] = useAtom(parserOptionsAtom);
     const query = useQuery({
-        queryKey: ['altitude', parserOptionsAtom],
+        queryKey: ['altitude', parserOptions],
         queryFn: async () => fetchAltitude(parserOptions.environnement, parserOptions.filename),
         refetchOnWindowFocus: false,
     });
