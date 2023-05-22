@@ -15,7 +15,6 @@ import { parserOptionsAtom } from '../utils/atoms';
 import { useAtom } from 'jotai';
 import { fetchAltitude } from '../utils/api';
 import zoomPlugin from 'chartjs-plugin-zoom';
-import { useEffect } from 'react';
 
 ChartJS.register(
     CategoryScale,
@@ -31,14 +30,10 @@ ChartJS.register(
 const Chart = () => {
     const [parserOptions] = useAtom(parserOptionsAtom);
     const query = useQuery({
-        queryKey: ['altitude'],
+        queryKey: ['altitude', parserOptionsAtom],
         queryFn: async () => fetchAltitude(parserOptions.environnement, parserOptions.filename),
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     });
-
-    useEffect(() => {
-        query.refetch();
-    }, [parserOptions]);
 
     const options = {
         scales: {

@@ -6,19 +6,18 @@ import { fetchFilenames } from '../utils/api';
 import { Select, Button, VStack } from '@chakra-ui/react';
 
 const ParserMenu = () => {
-    const query = useQuery({
-        queryKey: ['filenames'],
-        queryFn: fetchFilenames,
-        refetchOnWindowFocus: false
-    });
-
     const [, setOptions] = useAtom(parserOptionsAtom);
+
+    const query = useQuery({
+        queryKey: ['filenames', parserOptionsAtom],
+        queryFn: fetchFilenames,
+        refetchOnWindowFocus: false,
+    });
 
     const [selectedEnvironnement, setSelectedEnvironnement] = useState<string>('');
     const [selectedFilename, setSelectedFilename] = useState<string>('');
 
     const handleRunParser = () => {
-        console.log(selectedEnvironnement, " - ", selectedFilename)
         setOptions({
             environnement: selectedEnvironnement,
             filename: selectedFilename,
