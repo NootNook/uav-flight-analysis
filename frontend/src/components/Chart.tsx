@@ -14,6 +14,8 @@ import { useQuery } from '@tanstack/react-query';
 import { parserOptionsAtom } from '../utils/atoms';
 import { useAtom } from 'jotai';
 import { fetchAltitude } from '../utils/api';
+import zoomPlugin from 'chartjs-plugin-zoom';
+import { useEffect } from 'react';
 
 ChartJS.register(
     CategoryScale,
@@ -22,25 +24,58 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    zoomPlugin
 );
 
 const Chart = () => {
     const [parserOptions] = useAtom(parserOptionsAtom);
     const query = useQuery({
         queryKey: ['altitude'],
-        queryFn: async () =>
-            fetchAltitude(parserOptions.environnement, parserOptions.filename),
+        queryFn: async () => fetchAltitude(parserOptions.environnement, parserOptions.filename),
+        refetchOnWindowFocus: false
     });
 
+    useEffect(() => {
+        query.refetch();
+    }, [parserOptions]);
+
     const options = {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Time in milliseconds',
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Altitude in meters',
+                },
+            },
+        },
         plugins: {
             legend: {
-                position: 'top' as const,
+                display: false,
             },
             title: {
                 display: true,
-                text: 'Chart.js Line Chart',
+                text: 'Altiude as a function of milliseconds',
+            },
+            zoom: {
+                zoom: {
+                    drag: {
+                        enabled: true,
+                    },
+                    wheel: {
+                        enabled: true,
+                    },
+                    pinch: {
+                        enabled: true,
+                    },
+                    mode: 'xy' as const,
+                },
             },
         },
         responsive: true,
@@ -52,7 +87,7 @@ const Chart = () => {
         labels,
         datasets: [
             {
-                label: 'Dataset 1',
+                label: 'Altitude in meters',
                 data: query.data?.map((res) => res.altitude),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',

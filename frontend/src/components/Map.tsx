@@ -6,6 +6,7 @@ import { fetchGps } from '../utils/api';
 import { useAtom } from 'jotai';
 import { parserOptionsAtom } from '../utils/atoms';
 import ViewMap from './ViewMap';
+import { useEffect } from 'react';
 
 const Map = () => {
     const initCenter: LatLngLiteral = {
@@ -14,14 +15,18 @@ const Map = () => {
     };
 
     const [parserOptions] = useAtom(parserOptionsAtom);
+
     const query = useQuery({
         queryKey: ['gps'],
-        queryFn: async () =>
-            fetchGps(parserOptions.environnement, parserOptions.filename),
-        select: (data: TGPSObject[]) =>
-            data.map((e) => ({ lat: e.latitude, lng: e.longitude })),
+        queryFn: async () => fetchGps(parserOptions.environnement, parserOptions.filename),
+        select: (data: TGPSObject[]) => data.map((e) => ({ lat: e.latitude, lng: e.longitude })),
         initialData: [],
+        refetchOnWindowFocus: false
     });
+
+    useEffect(() => {
+        query.refetch();
+    }, [parserOptions]);
 
     const limeOptions = { color: 'red' };
 
@@ -29,7 +34,7 @@ const Map = () => {
         <MapContainer
             className={map}
             center={initCenter}
-            zoom={13}
+            zoom={16}
             scrollWheelZoom={true}
             maxZoom={25}
         >
