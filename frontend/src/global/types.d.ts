@@ -20,6 +20,6 @@ interface TAltitudeObject {
 }
 
 interface TViewMap {
-    isSuccess: boolean,
-    position: LatLngLiteral
+    isSuccess: boolean;
+    position: LatLngLiteral | undefined;
 }
