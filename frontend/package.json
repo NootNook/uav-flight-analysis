@@ -11,8 +11,10 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@tanstack/react-query": "^4.29.7",
         "@vanilla-extract/css": "^1.11.0",
         "chart.js": "^4.3.0",
+        "jotai": "^2.1.0",
         "leaflet": "^1.9.3",
         "react": "^18.2.0",
         "react-chartjs-2": "^5.2.0",

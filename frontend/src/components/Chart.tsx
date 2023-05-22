@@ -10,10 +10,29 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { chart } from './styles.css';
+import { useQuery } from '@tanstack/react-query';
+import { parserOptionsAtom } from '../utils/atoms';
+import { useAtom } from 'jotai';
+import { fetchAltitude } from '../utils/api';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const Chart = () => {
+    const [parserOptions] = useAtom(parserOptionsAtom);
+    const query = useQuery({
+        queryKey: ['altitude'],
+        queryFn: async () =>
+            fetchAltitude(parserOptions.environnement, parserOptions.filename),
+    });
+
     const options = {
         plugins: {
             legend: {
@@ -28,13 +47,13 @@ const Chart = () => {
         maintainAspectRatio: false,
         aspectRatio: 2,
     };
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    const labels = query.data?.map((res) => res.timestamp);
     const data = {
         labels,
         datasets: [
             {
                 label: 'Dataset 1',
-                data: [1, 2, 3, 4, 5, 6, 7],
+                data: query.data?.map((res) => res.altitude),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },

@@ -8,8 +8,6 @@ module.exports = {
         'plugin:react-hooks/recommended',
         'plugin:import/recommended',
         'plugin:import/typescript',
-        'plugin:import/errors',
-        'plugin:import/warnings',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
