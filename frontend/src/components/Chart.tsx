@@ -74,7 +74,7 @@ const Chart = () => {
             },
         },
         elements: {
-            point: {radius: 1}
+            point: { radius: 1 },
         },
         responsive: true,
         maintainAspectRatio: false,

@@ -1,8 +1,8 @@
 import Chart from './Chart';
-import ParserMenu from './ParserMenu';
 import Map from './Map';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ChakraProvider, Flex } from '@chakra-ui/react';
+import Form from './Form';
 
 const queryClient = new QueryClient();
 
@@ -14,7 +14,7 @@ const App = () => {
                     <Map />
                     <Flex flexDirection='column' width='50vw' height='auto' margin='1%'>
                         <Chart />
-                        <ParserMenu />
+                        <Form />
                     </Flex>
                 </Flex>
             </QueryClientProvider>

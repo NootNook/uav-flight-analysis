@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { map } from './styles.css';
 import { fetchGps } from '../utils/api';
 import { useAtom } from 'jotai';
-import { parserOptionsAtom } from '../utils/atoms';
+import { parserOptionsAtom, urlTileLayerAtom } from '../utils/atoms';
 import ViewMap from './ViewMap';
 
 const Map = () => {
@@ -14,6 +14,7 @@ const Map = () => {
     };
 
     const [parserOptions] = useAtom(parserOptionsAtom);
+    const [urlTileLayer] = useAtom(urlTileLayerAtom);
 
     const query = useQuery({
         queryKey: ['gps', parserOptions],
@@ -26,18 +27,13 @@ const Map = () => {
     const limeOptions = { color: 'red' };
 
     return (
-        <MapContainer
-            className={map}
-            center={initCenter}
-            zoom={15}
-            scrollWheelZoom={true}
-        >
+        <MapContainer className={map} center={initCenter} zoom={15} scrollWheelZoom={true}>
             <ViewMap isSuccess={query.isSuccess} position={query.data[0]} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                maxNativeZoom={18}
-                maxZoom={100}
+                url={urlTileLayer}
+                maxNativeZoom={22}
+                maxZoom={22} //100 - 500
             />
             <Polyline pathOptions={limeOptions} positions={query.data} />
         </MapContainer>
