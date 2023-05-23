@@ -29,14 +29,15 @@ const Map = () => {
         <MapContainer
             className={map}
             center={initCenter}
-            zoom={16}
+            zoom={15}
             scrollWheelZoom={true}
-            maxZoom={25}
         >
             <ViewMap isSuccess={query.isSuccess} position={query.data[0]} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+                url='https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                maxNativeZoom={18}
+                maxZoom={100}
             />
             <Polyline pathOptions={limeOptions} positions={query.data} />
         </MapContainer>
