@@ -15,6 +15,8 @@ import { parserOptionsAtom } from '../utils/atoms';
 import { useAtom } from 'jotai';
 import { fetchAltitude } from '../utils/api';
 import zoomPlugin from 'chartjs-plugin-zoom';
+import { Button, VStack } from '@chakra-ui/react';
+import { useRef } from 'react';
 
 ChartJS.register(
     CategoryScale,
@@ -34,6 +36,12 @@ const Chart = () => {
         queryFn: async () => fetchAltitude(parserOptions.environnement, parserOptions.filename),
         refetchOnWindowFocus: false,
     });
+
+    const chartReference = useRef<ChartJS<'line'>>(null);
+
+    const handleResetZoom = () => {
+        chartReference.current?.resetZoom();
+    };
 
     const options = {
         scales: {
@@ -94,9 +102,14 @@ const Chart = () => {
     };
 
     return (
-        <div id='testChart' className={chart}>
-            <Line options={options} data={data} />
-        </div>
+        <VStack>
+            <div className={chart}>
+                <Line ref={chartReference} options={options} data={data} />
+            </div>
+            <Button colorScheme='teal' size='sm' onClick={handleResetZoom}>
+                Reset zoom
+            </Button>
+        </VStack>
     );
 };
 
