@@ -23,3 +23,11 @@ interface TViewMap {
     isSuccess: boolean;
     position: LatLngLiteral | undefined;
 }
+
+interface TMap {
+    className: string;
+}
+
+interface TChart {
+    className: string;
+}

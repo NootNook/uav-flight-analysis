@@ -9,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { chart } from './styles.css';
 import { useQuery } from '@tanstack/react-query';
 import { parserOptionsAtom } from '../utils/atoms';
 import { useAtom } from 'jotai';
@@ -29,7 +28,7 @@ ChartJS.register(
     zoomPlugin
 );
 
-const Chart = () => {
+const Chart = ({ className }: TChart) => {
     const [parserOptions] = useAtom(parserOptionsAtom);
     const query = useQuery({
         queryKey: ['altitude', parserOptions],
@@ -103,7 +102,7 @@ const Chart = () => {
 
     return (
         <VStack>
-            <div className={chart}>
+            <div className={className}>
                 <Line ref={chartReference} options={options} data={data} />
             </div>
             <Button colorScheme='teal' size='sm' onClick={handleResetZoom}>
