@@ -13,7 +13,7 @@ const ViewMap = ({ isSuccess, position }: TViewMap) => {
         if (indexValue === idContainer) {
             map.invalidateSize();
         }
-    }, [indexValue, map]);
+    }, [indexValue, idContainer, map]);
 
     if (isSuccess && position != undefined) map.setView(position, map.getZoom());
 
