@@ -7,7 +7,7 @@ import { chart, mapDashboard } from './styles.css';
 const Dashboard = () => {
     return (
         <Flex css flexDirection='row' height='90vh' width='100vw'>
-            <Map className={mapDashboard} />
+            <Map idTab={0} className={mapDashboard}></Map>
             <VStack spacing={10} direction='column' width='50vw' height='auto' margin='1%'>
                 <Chart className={chart} />
                 <Form />

@@ -4,17 +4,22 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, ChakraProvider } from '@chakra
 import Dashboard from './Dashboard';
 import { chart, mapFullscreen } from './styles.css';
 import Chart from './Chart';
-import { useState } from 'react';
+import { useAtom } from 'jotai';
+import { indexTabsAtom } from '../utils/atoms';
 
 const queryClient = new QueryClient();
 
 const App = () => {
-    const [index, setIndex] = useState(0);
+    const [, setIndexAtom] = useAtom(indexTabsAtom);
+
+    const onChange = (index: number) => {
+        setIndexAtom(index);
+    };
 
     return (
         <ChakraProvider>
             <QueryClientProvider client={queryClient}>
-                <Tabs defaultIndex={0} onChange={(index: number) => setIndex(index)}>
+                <Tabs defaultIndex={0} onChange={onChange} width='100vw' height='42px'>
                     <TabList>
                         <Tab>Dashboard</Tab>
                         <Tab>Map</Tab>
@@ -24,8 +29,8 @@ const App = () => {
                         <TabPanel>
                             <Dashboard />
                         </TabPanel>
-                        <TabPanel>
-                            <Map key={index} className={mapFullscreen} />
+                        <TabPanel padding={0}>
+                            <Map idTab={1} className={mapFullscreen} />
                         </TabPanel>
                         <TabPanel>
                             <Chart className={chart} />

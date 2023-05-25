@@ -25,6 +25,7 @@ interface TViewMap {
 }
 
 interface TMap {
+    idTab: number;
     className: string;
 }
 

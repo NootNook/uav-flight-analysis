@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 export const mapDashboard = style({
     height: '100%',
@@ -6,8 +7,8 @@ export const mapDashboard = style({
 });
 
 export const mapFullscreen = style({
-    height: '91vh',
-    width: '95vw',
+    height: calc.subtract("100vh", "42px"),
+    width: '100vw',
 });
 
 export const chart = style({

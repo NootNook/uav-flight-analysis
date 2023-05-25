@@ -6,7 +6,7 @@ import { useAtom } from 'jotai';
 import { parserOptionsAtom, urlTileLayerAtom } from '../utils/atoms';
 import ViewMap from './ViewMap';
 
-const Map = ({ className }: TMap) => {
+const Map = ({ idTab, className }: TMap) => {
     const initCenter: LatLngLiteral = {
         lat: 44.69821684673496,
         lng: -1.1767003924998303,
@@ -23,10 +23,16 @@ const Map = ({ className }: TMap) => {
         refetchOnWindowFocus: false,
     });
 
-    const limeOptions = { color: 'red' };
+    const chartOptions = { color: 'red' };
 
     return (
-        <MapContainer className={className} center={initCenter} zoom={15} scrollWheelZoom={true}>
+        <MapContainer
+            id={idTab.toString()}
+            className={className}
+            center={initCenter}
+            zoom={15}
+            scrollWheelZoom={true}
+        >
             <ViewMap isSuccess={query.isSuccess} position={query.data[0]} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -34,7 +40,7 @@ const Map = ({ className }: TMap) => {
                 maxNativeZoom={22}
                 maxZoom={22} //100 - 500
             />
-            <Polyline pathOptions={limeOptions} positions={query.data} />
+            <Polyline pathOptions={chartOptions} positions={query.data} />
         </MapContainer>
     );
 };
