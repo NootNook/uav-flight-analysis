@@ -9,25 +9,27 @@ import { useState } from 'react';
 const queryClient = new QueryClient();
 
 const App = () => {
-    const [state, setState] = useState(0);
-
-    const onChange = (index: number) => {
-        setState(index);
-    };
+    const [index, setIndex] = useState(0);
 
     return (
         <ChakraProvider>
             <QueryClientProvider client={queryClient}>
-                <Tabs defaultIndex={0} onChange={onChange}>
+                <Tabs defaultIndex={0} onChange={(index: number) => setIndex(index)}>
                     <TabList>
                         <Tab>Dashboard</Tab>
                         <Tab>Map</Tab>
                         <Tab>Charts</Tab>
                     </TabList>
                     <TabPanels>
-                        <TabPanel><Dashboard /></TabPanel>
-                        <TabPanel><Map className={mapFullscreen} /></TabPanel>
-                        <TabPanel><Chart className={chart} /></TabPanel>
+                        <TabPanel>
+                            <Dashboard />
+                        </TabPanel>
+                        <TabPanel>
+                            <Map key={index} className={mapFullscreen} />
+                        </TabPanel>
+                        <TabPanel>
+                            <Chart className={chart} />
+                        </TabPanel>
                     </TabPanels>
                 </Tabs>
             </QueryClientProvider>
