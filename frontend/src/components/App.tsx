@@ -4,29 +4,30 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, ChakraProvider } from '@chakra
 import Dashboard from './Dashboard';
 import { chart, mapFullscreen } from './styles.css';
 import Chart from './Chart';
+import { useState } from 'react';
 
 const queryClient = new QueryClient();
 
 const App = () => {
+    const [state, setState] = useState(0);
+
+    const onChange = (index: number) => {
+        setState(index);
+    };
+
     return (
         <ChakraProvider>
             <QueryClientProvider client={queryClient}>
-                <Tabs defaultIndex={0} isLazy={true} lazyBehavior='unmount'>
+                <Tabs defaultIndex={0} onChange={onChange}>
                     <TabList>
                         <Tab>Dashboard</Tab>
                         <Tab>Map</Tab>
                         <Tab>Charts</Tab>
                     </TabList>
                     <TabPanels>
-                        <TabPanel>
-                            <Dashboard />
-                        </TabPanel>
-                        <TabPanel>
-                            <Map className={mapFullscreen} />
-                        </TabPanel>
-                        <TabPanel>
-                            <Chart className={chart} />
-                        </TabPanel>
+                        <TabPanel><Dashboard /></TabPanel>
+                        <TabPanel><Map className={mapFullscreen} /></TabPanel>
+                        <TabPanel><Chart className={chart} /></TabPanel>
                     </TabPanels>
                 </Tabs>
             </QueryClientProvider>
