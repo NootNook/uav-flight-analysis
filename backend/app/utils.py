@@ -31,4 +31,4 @@ def remove_consecutive_duplicates_gps(data):
 
 def get_filenames_from_assets():
     current_path = os.getcwd() + "/"
-    return os.listdir(current_path + "backend/app/assets")
+    return os.listdir(current_path + "/app/assets")

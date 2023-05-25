@@ -23,7 +23,7 @@ class ParserLog:
 
     def parserOnBoard(self, filename: str, mode: str) -> list:
 
-        path = os.getcwd() + "/backend/app/assets/"
+        path = os.getcwd() + "/app/assets/"
 
         result = []
 
@@ -49,7 +49,7 @@ class ParserLog:
         return result
 
     def parserAirData(self, filename: str, mode: str) -> list:
-        path = os.getcwd() + "/backend/app/assets/"
+        path = os.getcwd() + "/app/assets/"
 
         result = []
         timestamp = 0
@@ -76,7 +76,7 @@ class ParserLog:
         return result
     
     def parserDjiParsingLib(self, filename: str, mode: str) -> list:
-        path = os.getcwd() + "/backend/app/assets/"
+        path = os.getcwd() + "/app/assets/"
         result = []
 
         timestamp = 0

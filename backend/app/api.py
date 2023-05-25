@@ -24,7 +24,7 @@ app.add_middleware(
 # ---------------------------------------------
 
 @app.get("/parser/{environnment}/{mode}", tags=["root"])
-async def parser_multimodes(environnment: str, mode: str, filename: str | None = "May-3rd-2023-10-41AM-Flight-Airdata.csv") -> Response:
+async def parser_multimodes(environnment: str, mode: str, filename: str = "May-3rd-2023-10-41AM-Flight-Airdata.csv") -> Response:
     if mode in ["gps", "altitude"]:
         parserLog = ParserLog(environnment, mode)
         data = parserLog.run(filename)
