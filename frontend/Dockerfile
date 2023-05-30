@@ -8,4 +8,4 @@ RUN pnpm install
 
 EXPOSE 8000
 
-CMD [ "pnpm", "run", "dev" ]
+CMD [ "pnpm", "run", "dev", "--host" ]
