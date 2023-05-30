@@ -2,8 +2,8 @@ FROM python:3
 
 RUN mkdir -p /backend
 WORKDIR /backend
-RUN pip3 install uvicorn fastapi numpy
 COPY ./ .
+RUN pip3 install -r requirements.txt
 
 EXPOSE 5173
 
