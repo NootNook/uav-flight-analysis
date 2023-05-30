@@ -2,7 +2,7 @@ import Map from './Map';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Tabs, TabList, TabPanels, Tab, TabPanel, ChakraProvider } from '@chakra-ui/react';
 import Dashboard from './Dashboard';
-import { chart, mapFullscreen, tabsHeader } from './styles.css';
+import { chartFullscreen, mapFullscreen, tabsHeader } from './styles.css';
 import Chart from './Chart';
 import { useAtom } from 'jotai';
 import { indexTabsAtom } from '../utils/atoms';
@@ -33,7 +33,7 @@ const App = () => {
                             <Map idTab={1} className={mapFullscreen} />
                         </TabPanel>
                         <TabPanel>
-                            <Chart className={chart} />
+                            <Chart className={chartFullscreen} />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

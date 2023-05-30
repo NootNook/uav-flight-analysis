@@ -1,15 +1,19 @@
-import numpy as np
 import os
 import csv
 import json
+import numpy as np
+import pyproj
 
 from .globals import *
-from .utils import remove_consecutive_duplicates_altitudes, remove_consecutive_duplicates_gps
+from .utils import feets_to_meters, remove_consecutive_duplicates_altitudes, remove_consecutive_duplicates_gps, transform_wgs84_ellipsoid_height_to_mean_sea_level
 
 class ParserLog:
     def __init__(self, environnement: str, mode: str) -> None:
         self.environnement = environnement
         self.mode = mode
+
+        pyproj.network.set_network_enabled(active=True)
+
 
     def run(self, filename: str) -> list:
         if self.environnement == "onboardSDK":
@@ -32,19 +36,21 @@ class ParserLog:
             next(raw_csvreader) # skip header csv
 
             data_formatted = remove_consecutive_duplicates_altitudes(raw_csvreader) if mode == "altitude" else remove_consecutive_duplicates_gps(raw_csvreader)
+            size_data = len(data_formatted)
+            
+            timestamps = [data["timestamp"] for data in data_formatted]
+            metrics = np.array([data["metrics"] for data in data_formatted]).astype(np.float32)
 
-            for data in data_formatted:
-                if mode == "gps":
-                    result.append({
-                        "timestamp": int(data["timestamp"]),
-                        "latitude": float(data["metrics"][ONBOARD_SDK_GPS_LATITUDE_INDEX]) / 10000000,
-                        "longitude": float(data["metrics"][ONBOARD_SDK_GPS_LONGITUDE_INDEX]) / 10000000
-                    })
-                elif mode == "altitude":
-                    result.append({
-                        "timestamp": int(data["timestamp"]),
-                        "altitude": float(data["metrics"][ONBOARD_SDK_GPS_FUSED_ALTITUDE_INDEX]),
-                    })
+            wgs84_latitudes = np.divide(metrics[:, ONBOARD_SDK_GPS_LATITUDE_INDEX], 10000000, dtype=np.float32).tolist()
+            wgs84_longitudes = np.divide(metrics[:, ONBOARD_SDK_GPS_LONGITUDE_INDEX], 10000000, dtype=np.float32).tolist()
+
+            if mode == "gps":
+                result = [{"timestamp": timestamps[i], "latitude": wgs84_latitudes[i], "longitude": wgs84_longitudes[i]} for i in range(size_data)]
+            elif mode == "altitude":
+                wgs84_ellipsoid_height = np.array(metrics[:, ONBOARD_SDK_GPS_FUSED_ALTITUDE_INDEX], dtype=np.float32).tolist()
+                (_, _, altitudes_msl) = transform_wgs84_ellipsoid_height_to_mean_sea_level(wgs84_latitudes, wgs84_longitudes, wgs84_ellipsoid_height)
+
+                result = [{"timestamp": timestamps[i], "wgs84_ellipsoid_height": wgs84_ellipsoid_height[i], "orthometric_height": altitudes_msl[i]} for i in range(size_data)]
 
         return result
 
@@ -67,9 +73,10 @@ class ParserLog:
                         "longitude": float(data[AIRDATA_GPS_LONGITUDE_INDEX])
                     })
                 elif mode == "altitude":
+                    altitude_in_feets = feets_to_meters(float(data[AIRDATA_GPS_ALTITUDE_INDEX]))
                     result.append({
                         "timestamp": int(timestamp),
-                        "altitude": float(data[AIRDATA_GPS_ALTITUDE_INDEX]),
+                        "orthometric_height": altitude_in_feets,
                     })
 
                 timestamp += OFFSET

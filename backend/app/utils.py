@@ -1,6 +1,6 @@
 from .globals import *
-import json
 import os
+import pyproj
 
 def remove_consecutive_duplicates_altitudes(data):
     lines = []
@@ -29,6 +29,19 @@ def remove_consecutive_duplicates_gps(data):
     res = [{"timestamp": k, "metrics": v} for k, v in zip(timestamps, result)]
     return res
 
-def get_filenames_from_assets():
+def get_filenames_from_assets() -> str:
     current_path = os.getcwd() + "/"
     return os.listdir(current_path + "/app/assets")
+
+def transform_wgs84_ellipsoid_height_to_mean_sea_level(wgs84_latitudes: list[float], wgs84_longitudes: list[float], wgs84_ellipsoid_height: list[float]) -> tuple[list[float], list[float], list[float]]:
+    WGS84 = pyproj.crs.CRS.from_epsg(4979)
+    WGS84_EGM2008 = pyproj.crs.CRS.from_epsg(9518)
+
+    TRANSFORMER = pyproj.transformer.Transformer.from_crs(crs_from=WGS84, crs_to=WGS84_EGM2008)
+
+    (new_latitudes, new_longitudes, new_altitudes) = TRANSFORMER.transform(wgs84_latitudes, wgs84_longitudes, wgs84_ellipsoid_height)
+
+    return (new_latitudes, new_longitudes, new_altitudes)
+
+def feets_to_meters(feets: float) -> float:
+    return feets/3.2808399

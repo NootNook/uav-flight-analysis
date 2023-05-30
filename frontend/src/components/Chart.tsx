@@ -59,7 +59,7 @@ const Chart = ({ className }: TChart) => {
         },
         plugins: {
             legend: {
-                display: false,
+                display: true,
             },
             title: {
                 display: true,
@@ -92,11 +92,17 @@ const Chart = ({ className }: TChart) => {
         labels,
         datasets: [
             {
-                label: 'Altitude in meters',
-                data: query.data?.map((res) => res.altitude),
+                label: 'WGS84 ellipsoid height in meters',
+                data: query.data?.map((res) => res.wgs84_ellipsoid_height),
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
+            {
+                label: 'Orthometric height (mean sea level) in meters',
+                data: query.data?.map((res) => res.orthometric_height),
+                borderColor: 'rgb(99, 122, 255)',
+                backgroundColor: 'rgba(99, 122, 255, 0.5)',
+            }
         ],
     };
 

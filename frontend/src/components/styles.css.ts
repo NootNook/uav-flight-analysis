@@ -22,7 +22,12 @@ export const mapFullscreen = style({
     width: '100vw',
 });
 
-export const chart = style({
-    height: '40vh',
+export const chartDashboard = style({
+    height: '50vh',
     width: '50vw',
+});
+
+export const chartFullscreen = style({
+    height: '80vh',
+    width: '80vw',
 });
