@@ -1,10 +1,18 @@
-import { MapContainer, Polyline, TileLayer } from 'react-leaflet';
-import { LatLngLiteral } from 'leaflet';
+import { MapContainer, Polyline, TileLayer, Marker, Popup } from 'react-leaflet';
+import { BaseIconOptions, Icon, LatLngLiteral } from 'leaflet';
 import { useQuery } from '@tanstack/react-query';
 import { fetchGps } from '../utils/api';
 import { useAtom } from 'jotai';
 import { parserOptionsAtom, urlTileLayerAtom } from '../utils/atoms';
 import ViewMap from './ViewMap';
+
+const defaultOptionsIcon: BaseIconOptions = {
+    iconAnchor: [12, 41],
+    iconSize: [25, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [16, -28],
+    shadowSize: [41, 41],
+}
 
 const Map = ({ idTab, className }: TMap) => {
     const initCenter: LatLngLiteral = {
@@ -23,7 +31,12 @@ const Map = ({ idTab, className }: TMap) => {
         refetchOnWindowFocus: false,
     });
 
-    const chartOptions = { color: 'red' };
+    const chartOptions = { color: '#0C134F' };
+
+    const endIcon = new Icon({
+        iconUrl: 'marker-icon-red.png',
+        ...defaultOptionsIcon
+    });
 
     return (
         <MapContainer
@@ -33,14 +46,24 @@ const Map = ({ idTab, className }: TMap) => {
             zoom={15}
             scrollWheelZoom={true}
         >
-            <ViewMap isSuccess={query.isSuccess} position={query.data[0]} />
+            <ViewMap isSuccess={!query.isFetching} position={query.data[0]} />
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url={urlTileLayer}
                 maxNativeZoom={22}
                 maxZoom={22} //100 - 500
             />
-            <Polyline pathOptions={chartOptions} positions={query.data} />
+            {!query.isFetching && (
+                <>
+                    <Marker position={query.data[0]} >
+                        <Popup>🏎️ Start</Popup>
+                    </Marker>
+                    <Marker position={query.data[query.data.length - 1]} icon={endIcon}>
+                        <Popup>🏁 End</Popup>
+                    </Marker>
+                    <Polyline pathOptions={chartOptions} positions={query.data} />
+                </>
+            )}
         </MapContainer>
     );
 };

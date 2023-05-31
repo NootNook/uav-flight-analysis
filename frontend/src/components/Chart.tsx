@@ -102,7 +102,7 @@ const Chart = ({ className }: TChart) => {
                 data: query.data?.map((res) => res.orthometric_height),
                 borderColor: 'rgb(99, 122, 255)',
                 backgroundColor: 'rgba(99, 122, 255, 0.5)',
-            }
+            },
         ],
     };
 

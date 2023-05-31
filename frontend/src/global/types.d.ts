@@ -17,7 +17,7 @@ interface TGPSObject {
 interface TAltitudeObject {
     timestamp: number;
     wgs84_ellipsoid_height: number;
-    orthometric_height: number
+    orthometric_height: number;
 }
 
 interface TViewMap {
