@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { parserOptionsAtom } from '../utils/atoms';
 import { fetchFilenames } from '../utils/api';
 import { Select, Button, VStack } from '@chakra-ui/react';
 
 const ParserMenu = () => {
-    const [, setOptions] = useAtom(parserOptionsAtom);
+    const setOptions = useSetAtom(parserOptionsAtom);
 
     const query = useQuery({
         queryKey: ['filenames', parserOptionsAtom],

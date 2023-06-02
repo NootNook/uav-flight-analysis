@@ -31,5 +31,9 @@ interface TMap {
 }
 
 interface TChart {
-    className: string;
+    className?: string;
+}
+
+interface TProgressSlider extends TChart {
+    orientation: 'horizontal' | 'vertical' | undefined;
 }

@@ -2,8 +2,8 @@ import { MapContainer, Polyline, TileLayer, Marker, Popup } from 'react-leaflet'
 import { BaseIconOptions, Icon, LatLngLiteral } from 'leaflet';
 import { useQuery } from '@tanstack/react-query';
 import { fetchGps } from '../utils/api';
-import { useAtom } from 'jotai';
-import { parserOptionsAtom, urlTileLayerAtom } from '../utils/atoms';
+import { useAtomValue } from 'jotai';
+import { parserOptionsAtom, urlTileLayerAtom, valueSliderAtom } from '../utils/atoms';
 import ViewMap from './ViewMap';
 
 const defaultOptionsIcon: BaseIconOptions = {
@@ -12,7 +12,12 @@ const defaultOptionsIcon: BaseIconOptions = {
     popupAnchor: [1, -34],
     tooltipAnchor: [16, -28],
     shadowSize: [41, 41],
-}
+};
+
+const getPercentageOfArray = (array: LatLngLiteral[], percentage: number) => {
+    const numElements = Math.ceil(array.length * (percentage / 100));
+    return array.slice(0, numElements);
+};
 
 const Map = ({ idTab, className }: TMap) => {
     const initCenter: LatLngLiteral = {
@@ -20,23 +25,27 @@ const Map = ({ idTab, className }: TMap) => {
         lng: -1.1767003924998303,
     };
 
-    const [parserOptions] = useAtom(parserOptionsAtom);
-    const [urlTileLayer] = useAtom(urlTileLayerAtom);
+    const parserOptions = useAtomValue(parserOptionsAtom);
+    const urlTileLayer = useAtomValue(urlTileLayerAtom);
+    const valueSlider = useAtomValue(valueSliderAtom);
 
     const query = useQuery({
         queryKey: ['gps', parserOptions],
         queryFn: async () => fetchGps(parserOptions.environnement, parserOptions.filename),
-        select: (data: TGPSObject[]) => data.map((e) => ({ lat: e.latitude, lng: e.longitude })),
+        select: (data: TGPSObject[]): LatLngLiteral[] =>
+            data.map((e) => ({ lat: e.latitude, lng: e.longitude })),
         initialData: [],
         refetchOnWindowFocus: false,
     });
 
-    const chartOptions = { color: '#0C134F' };
+    const chartOptions = { color: 'red' };
 
     const endIcon = new Icon({
         iconUrl: 'marker-icon-red.png',
-        ...defaultOptionsIcon
+        ...defaultOptionsIcon,
     });
+
+    const formattedArray = getPercentageOfArray(query.data, valueSlider);
 
     return (
         <MapContainer
@@ -55,13 +64,13 @@ const Map = ({ idTab, className }: TMap) => {
             />
             {!query.isFetching && (
                 <>
-                    <Marker position={query.data[0]} >
+                    <Marker position={query.data[0]}>
                         <Popup>🏎️ Start</Popup>
                     </Marker>
                     <Marker position={query.data[query.data.length - 1]} icon={endIcon}>
                         <Popup>🏁 End</Popup>
                     </Marker>
-                    <Polyline pathOptions={chartOptions} positions={query.data} />
+                    <Polyline pathOptions={chartOptions} positions={formattedArray} />
                 </>
             )}
         </MapContainer>

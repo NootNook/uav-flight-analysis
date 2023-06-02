@@ -31,3 +31,7 @@ export const chartFullscreen = style({
     height: '80vh',
     width: '80vw',
 });
+
+export const progressSlider = style({
+    margin: '20px',
+});

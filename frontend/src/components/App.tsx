@@ -4,13 +4,12 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel, ChakraProvider } from '@chakra
 import Dashboard from './Dashboard';
 import { chartFullscreen, mapFullscreen, tabsHeader } from './styles.css';
 import Chart from './Chart';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { indexTabsAtom } from '../utils/atoms';
-
 const queryClient = new QueryClient();
 
 const App = () => {
-    const [, setIndexAtom] = useAtom(indexTabsAtom);
+    const setIndexAtom = useSetAtom(indexTabsAtom);
 
     const onChange = (index: number) => {
         setIndexAtom(index);

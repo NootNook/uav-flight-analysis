@@ -8,3 +8,5 @@ export const parserOptionsAtom = atom<TParserOptions>({
 export const urlTileLayerAtom = atom<string>('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
 export const indexTabsAtom = atom<number>(0);
+
+export const valueSliderAtom = atom<number>(100);

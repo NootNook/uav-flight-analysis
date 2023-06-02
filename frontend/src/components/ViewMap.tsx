@@ -1,13 +1,13 @@
 import { useMap } from 'react-leaflet';
 import { indexTabsAtom } from '../utils/atoms';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useEffect } from 'react';
 import { Map } from 'leaflet';
 
 const ViewMap = ({ isSuccess, position }: TViewMap) => {
     const map: Map = useMap();
 
-    const [indexValue] = useAtom(indexTabsAtom);
+    const indexValue = useAtomValue(indexTabsAtom);
     const idContainer = parseInt(map.getContainer().id);
     useEffect(() => {
         if (indexValue === idContainer) {

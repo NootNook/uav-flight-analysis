@@ -11,7 +11,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useQuery } from '@tanstack/react-query';
 import { parserOptionsAtom } from '../utils/atoms';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { fetchAltitude } from '../utils/api';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import { Button, VStack } from '@chakra-ui/react';
@@ -29,7 +29,7 @@ ChartJS.register(
 );
 
 const Chart = ({ className }: TChart) => {
-    const [parserOptions] = useAtom(parserOptionsAtom);
+    const parserOptions = useAtomValue(parserOptionsAtom);
     const query = useQuery({
         queryKey: ['altitude', parserOptions],
         queryFn: async () => fetchAltitude(parserOptions.environnement, parserOptions.filename),

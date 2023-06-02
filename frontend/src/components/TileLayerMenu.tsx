@@ -1,5 +1,5 @@
 import { Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react';
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { urlTileLayerAtom } from '../utils/atoms';
 import { useState } from 'react';
 
@@ -10,7 +10,7 @@ const tileList: Record<string, string> = {
 };
 
 const TileLayerMenu = () => {
-    const [, setUrlTileLayer] = useAtom(urlTileLayerAtom);
+    const setUrlTileLayer = useSetAtom(urlTileLayerAtom);
     const [checkboxChecked, setCheckboxChecked] = useState('1');
 
     const onChange = (values: string[]) => {
