@@ -1,2 +1,11 @@
+# Usage
+# airData:
+# - 1.csv
+# - 2.csv
+# DJIParsingLib:
+# - 3.json
+# onboardSDK:
+# - 4.csv
+
 onboardSDK:
   - demo.csv
