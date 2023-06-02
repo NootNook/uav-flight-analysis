@@ -23,7 +23,7 @@ class ParserLog:
         elif self.environnement == "DJIParsingLib":
             return self.parserDjiParsingLib(filename, self.mode)
         
-        print(f"WRONG ! Env : ${self.environnement} - Filename : ${filename} - Mode : ${self.mode}")
+        print(f"WRONG ! Env : {self.environnement} - Filename : {filename} - Mode : {self.mode}")
 
     def parserOnBoard(self, filename: str, mode: str) -> list:
 

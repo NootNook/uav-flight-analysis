@@ -4,7 +4,6 @@ interface LatLngLiteral {
 }
 
 interface TParserOptions {
-    environnement: string;
     filename: string;
 }
 
@@ -37,3 +36,5 @@ interface TChart {
 interface TProgressSlider extends TChart {
     orientation: 'horizontal' | 'vertical' | undefined;
 }
+
+type TDatabase = Record<string, string[]>;

@@ -1,53 +1,54 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useSetAtom } from 'jotai';
 import { parserOptionsAtom } from '../utils/atoms';
-import { fetchFilenames } from '../utils/api';
-import { Select, Button, VStack } from '@chakra-ui/react';
+import { fetchDatabase } from '../utils/api';
+import {
+    Button,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuDivider,
+    MenuItem,
+    MenuGroup,
+    Box,
+} from '@chakra-ui/react';
 
 const ParserMenu = () => {
     const setOptions = useSetAtom(parserOptionsAtom);
 
     const query = useQuery({
         queryKey: ['filenames', parserOptionsAtom],
-        queryFn: fetchFilenames,
+        queryFn: fetchDatabase,
         refetchOnWindowFocus: false,
     });
 
-    const [selectedEnvironnement, setSelectedEnvironnement] = useState<string>('');
-    const [selectedFilename, setSelectedFilename] = useState<string>('');
-
-    const handleRunParser = () => {
-        setOptions({
-            environnement: selectedEnvironnement,
-            filename: selectedFilename,
-        });
-    };
-
     return (
-        <VStack flexDirection='column' margin='50px' spacing={5}>
-            <Select
-                placeholder='Choose an environnement'
-                onChange={(e) => setSelectedEnvironnement(e.target.value)}
-            >
-                <option value='onboardSDK'>OnBoard SDK</option>
-                <option value='airData'>AirData</option>
-                <option value='DJIParsingLib'>DJI Flight Record Parsing Lib</option>
-            </Select>
-            <Select
-                placeholder='Choose a file'
-                onChange={(e) => setSelectedFilename(e.target.value)}
-            >
-                {query.data?.map((filename) => (
-                    <option key={filename} value={filename}>
-                        {filename}
-                    </option>
-                ))}
-            </Select>
-            <Button colorScheme='blue' onClick={handleRunParser}>
-                Run parser
-            </Button>
-        </VStack>
+        <Box margin='50px'>
+            <Menu>
+                <MenuButton as={Button} colorScheme='blue'>
+                    Choose a asset
+                </MenuButton>
+                <MenuList>
+                    {!query.isFetching &&
+                        query.data !== undefined &&
+                        Object.keys(query.data).map((environnement) => (
+                            <div key={`${environnement}-div`}>
+                                <MenuGroup key={`${environnement}-group`} title={environnement}>
+                                    {query.data[environnement].map((filename) => (
+                                        <MenuItem
+                                            key={`${environnement}-${filename}-item`}
+                                            onClick={() => setOptions({ filename: filename })}
+                                        >
+                                            {filename}
+                                        </MenuItem>
+                                    ))}
+                                </MenuGroup>
+                                <MenuDivider key={`${environnement}-divider`} />
+                            </div>
+                        ))}
+                </MenuList>
+            </Menu>
+        </Box>
     );
 };
 

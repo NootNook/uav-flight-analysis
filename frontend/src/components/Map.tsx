@@ -31,7 +31,7 @@ const Map = ({ idTab, className }: TMap) => {
 
     const query = useQuery({
         queryKey: ['gps', parserOptions],
-        queryFn: async () => fetchGps(parserOptions.environnement, parserOptions.filename),
+        queryFn: async () => fetchGps(parserOptions.filename),
         select: (data: TGPSObject[]): LatLngLiteral[] =>
             data.map((e) => ({ lat: e.latitude, lng: e.longitude })),
         initialData: [],

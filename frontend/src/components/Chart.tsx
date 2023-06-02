@@ -32,7 +32,7 @@ const Chart = ({ className }: TChart) => {
     const parserOptions = useAtomValue(parserOptionsAtom);
     const query = useQuery({
         queryKey: ['altitude', parserOptions],
-        queryFn: async () => fetchAltitude(parserOptions.environnement, parserOptions.filename),
+        queryFn: async () => fetchAltitude(parserOptions.filename),
         refetchOnWindowFocus: false,
     });
 

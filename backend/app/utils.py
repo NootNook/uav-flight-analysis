@@ -1,6 +1,7 @@
 from .globals import *
 import os
 import pyproj
+import yaml
 
 def remove_consecutive_duplicates_altitudes(data):
     lines = []
@@ -29,9 +30,12 @@ def remove_consecutive_duplicates_gps(data):
     res = [{"timestamp": k, "metrics": v} for k, v in zip(timestamps, result)]
     return res
 
-def get_filenames_from_assets() -> str:
-    current_path = os.getcwd() + "/"
-    return os.listdir(current_path + "/app/assets")
+def get_database() -> dict:
+    current_path = os.getcwd()
+    path = current_path + "/app/database/assets.yaml"
+    with open(path) as f:
+        data = yaml.load(f, Loader=yaml.loader.SafeLoader)
+        return data
 
 def transform_wgs84_ellipsoid_height_to_mean_sea_level(wgs84_latitudes: list[float], wgs84_longitudes: list[float], wgs84_ellipsoid_height: list[float]) -> tuple[list[float], list[float], list[float]]:
     WGS84 = pyproj.crs.CRS.from_epsg(4979)
@@ -45,3 +49,11 @@ def transform_wgs84_ellipsoid_height_to_mean_sea_level(wgs84_latitudes: list[flo
 
 def feets_to_meters(feets: float) -> float:
     return feets/3.2808399
+
+def get_key(target_value, dictionnary):
+
+    for key, value in dictionnary.items():
+        if target_value in value:
+            return key 
+        
+    return None

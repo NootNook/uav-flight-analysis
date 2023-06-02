@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 
 from .parser import ParserLog
-from .utils import get_filenames_from_assets
+from .utils import get_database, get_key
 
 app = FastAPI()
 
@@ -21,11 +21,16 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+database = get_database()
+
 # ---------------------------------------------
 
-@app.get("/parser/{environnment}/{mode}", tags=["root"])
-async def parser_multimodes(environnment: str, mode: str, filename: str = "May-3rd-2023-10-41AM-Flight-Airdata.csv") -> Response:
+@app.get("/parser/{mode}", tags=["root"])
+async def parser_multimodes(mode: str, filename: str = "demo.csv") -> Response:
     if mode in ["gps", "altitude"]:
+        environnment = get_key(filename, database)
+        print(environnment)
+
         parserLog = ParserLog(environnment, mode)
         data = parserLog.run(filename)
         
@@ -36,7 +41,5 @@ async def parser_multimodes(environnment: str, mode: str, filename: str = "May-3
 
 @app.get("/filenames", tags=["root"])
 async def get_filenames() -> Response:
-    filenames = get_filenames_from_assets()
-
-    json_compatible_item_data = jsonable_encoder(filenames)
+    json_compatible_item_data = jsonable_encoder(database)
     return JSONResponse(content=json_compatible_item_data)
